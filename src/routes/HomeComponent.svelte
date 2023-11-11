@@ -3,7 +3,7 @@
 	import TextInput from '../components/UI/TextInput.svelte';
 	import MeetupGrid from '../components/Meetups/MeetupGrid.svelte';
 	import Button from '../components/UI/Button.svelte';
-	import EditMeetups from '../components/Meetups/EditMeetups.svelte';
+	import EditMeetup from '../components/Meetups/EditMeetups.svelte';
 
 	let meetups = [
 		{
@@ -30,7 +30,7 @@
 		}
 	];
 
-	let editMode = null;
+	let editMode;
 
 	function addMeetup(event) {
 		const newMeetup = {
@@ -43,8 +43,12 @@
 			address: event.detail.address
 		};
 
+		// meetups.push(newMeetup); // DOES NOT WORK!
 		meetups = [newMeetup, ...meetups];
+		editMode = null;
+	}
 
+	function cancelEdit() {
 		editMode = null;
 	}
 
@@ -57,31 +61,26 @@
 		updatedMeetups[meetupIndex] = updatedMeetup;
 		meetups = updatedMeetups;
 	}
-
-	function cancelEdit() {
-		editMode = null;
-	}
 </script>
 
 <Header />
 
 <main>
 	<div class="meetup-controls">
-		<Button on:click={() => (editMode = !editMode)}>Add New Meetup</Button>
+		<Button on:click={() => (editMode = 'add')}>New Meetup</Button>
 	</div>
-	{#if editMode}
-		<EditMeetups on:save={addMeetup} on:close={cancelEdit} />
+	{#if editMode === 'add'}
+		<EditMeetup on:save={addMeetup} on:cancel={cancelEdit} />
 	{/if}
-
 	<MeetupGrid {meetups} on:togglefavorite={toggleFavorite} />
 </main>
 
 <style>
-	.meetup-controls {
-		margin: 1rem;
-	}
-
 	main {
 		margin-top: 5rem;
+	}
+
+	.meetup-controls {
+		margin: 1rem;
 	}
 </style>
