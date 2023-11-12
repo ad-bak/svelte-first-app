@@ -5,6 +5,7 @@
 
 	import EditMeetup from '../components/Meetups/EditMeetups.svelte';
 	import MeetupDetail from '../components/Meetups/MeetupDetail.svelte';
+	import fireApi from '../components/Meetups/vars';
 
 	// let meetups = ;
 
@@ -12,6 +13,24 @@
 	let editedId;
 	let page = 'overview';
 	let pageData = {};
+
+	fetch(`${fireApi}/meetups.json`)
+		.then((res) => {
+			if (!res.ok) throw new Error('Failed to fetch meetups.');
+			return res.json();
+		})
+		.then((data) => {
+			const loadedMeetups = [];
+
+			for (const key in data) {
+				loadedMeetups.push({
+					...data[key],
+					id: key
+				});
+			}
+
+			meetups.setMeetups(loadedMeetups);
+		});
 
 	function savedMeetup(event) {
 		editMode = null;
