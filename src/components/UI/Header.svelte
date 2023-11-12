@@ -9,7 +9,7 @@
 		top: 0;
 		left: 0;
 		height: 4rem;
-		background-color: #cf0056;
+		background: #cf0056;
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -18,7 +18,7 @@
 
 	h1 {
 		color: white;
-		font-family: 'Roboto Slap', serif;
+		font-family: 'Roboto Slab', serif;
 		margin: 0;
 	}
 </style>

@@ -1,26 +1,31 @@
 <script>
-	import Badge from '../UI/Badge.svelte';
-	import Button from '../UI/Button.svelte';
 	import { createEventDispatcher } from 'svelte';
+	import meetups from './meetup-store';
+	import Button from '../UI/Button.svelte';
+	import Badge from '../UI/Badge.svelte';
 
 	export let id;
 	export let title;
 	export let subtitle;
-	export let description;
 	export let imageUrl;
+	export let description;
 	export let address;
 	export let email;
-	export let isFavorite;
+	export let isFav;
 
 	const dispatch = createEventDispatcher();
+
+	function toggleFavorite() {
+		meetups.toggleFavorite(id);
+	}
 </script>
 
-<article {id}>
+<article>
 	<header>
 		<h1>
 			{title}
-			{#if isFavorite}
-				<Badge>Favorite</Badge>
+			{#if isFav}
+				<Badge>FAVORITE</Badge>
 			{/if}
 		</h1>
 		<h2>{subtitle}</h2>
@@ -33,16 +38,11 @@
 		<p>{description}</p>
 	</div>
 	<footer>
-		<Button href="mailto:{email}">Contact</Button>
-		<Button
-			mode="outline"
-			color={isFavorite ? 'success' : null}
-			on:click={() => dispatch('togglefavorite', id)}
-		>
-			{isFavorite ? 'Un-Favorite' : 'Favorite'}
+		<Button mode="outline" type="button" on:click={() => dispatch('edit', id)}>Edit</Button>
+		<Button mode="outline" color={isFav ? null : 'success'} type="button" on:click={toggleFavorite}>
+			{isFav ? 'Unfavorite' : 'Favorite'}
 		</Button>
-
-		<Button>Show Details</Button>
+		<Button type="button" on:click={() => dispatch('showdetails', id)}>Show Details</Button>
 	</footer>
 </article>
 
@@ -97,5 +97,9 @@
 
 	div {
 		text-align: right;
+	}
+
+	.content {
+		height: 4rem;
 	}
 </style>
