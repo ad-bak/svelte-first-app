@@ -53,6 +53,20 @@
 
 		// meetups.push(newMeetup); // DOES NOT WORK!
 		if (id) {
+			fetch(`${BACKEND_API}/meetups/${id}.json`, {
+				method: 'PATCH',
+				body: JSON.stringify(meetupData),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
+				.then((res) => {
+					if (!res.ok) {
+						throw new Error('Failed to update meetup.');
+					}
+					meetups.updateMeetup(id, meetupData);
+				})
+				.catch((err) => console.log(err));
 			meetups.updateMeetup(id, meetupData);
 		} else {
 			fetch(`${BACKEND_API}/meetups.json`, {
@@ -79,7 +93,16 @@
 	}
 
 	function deleteMeetup() {
-		meetups.removeMeetup(id);
+		fetch(`${BACKEND_API}/meetups/${id}.json`, {
+			method: 'DELETE'
+		})
+			.then((res) => {
+				if (!res.ok) {
+					throw new Error('Failed to delete meetup.');
+				}
+				meetups.removeMeetup(id);
+			})
+			.catch((err) => console.log(err));
 		dispatch('save');
 	}
 

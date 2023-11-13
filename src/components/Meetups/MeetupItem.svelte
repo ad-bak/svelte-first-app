@@ -3,6 +3,7 @@
 	import meetups from './meetup-store';
 	import Button from '../UI/Button.svelte';
 	import Badge from '../UI/Badge.svelte';
+	import BACKEND_API from './vars.js';
 
 	export let id;
 	export let title;
@@ -16,6 +17,15 @@
 	const dispatch = createEventDispatcher();
 
 	function toggleFavorite() {
+		fetch(`${BACKEND_API}/meetups/${id}.json`, {
+			method: 'PATCH',
+			body: JSON.stringify({
+				isFavorite: !isFav
+			}),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
 		meetups.toggleFavorite(id);
 	}
 </script>
